@@ -34,6 +34,21 @@ class User extends Authenticatable
         'username_changed_at' => 'datetime',
     ];
 
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'user_followers', 'user_id', 'follower_id');
+    }
+
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'user_followers', 'follower_id', 'user_id');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
     public function getImageAttribute($image)
     {
         // we are using placeholder for image for fake users
