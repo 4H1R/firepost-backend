@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthenticatedUser;
-use App\Http\Controllers\UserFollowerController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserFollowerController;
+use App\Http\Controllers\User\UserFollowingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('user', AuthenticatedUser::class)->name('user');
 Route::apiResource('users', UserController::class)->except(['store']);
-Route::apiResource('users.followers', UserFollowerController::class)->only(['index', 'store', 'destroy']);
-Route::apiResource('users.followings', UserController::class)->only(['index']);
+Route::apiResource('users.followers', UserFollowerController::class)->only(['index', 'store']);
+Route::apiResource('users.followings', UserFollowingController::class)->only(['index']);
+Route::delete('users/{user}/followers', [UserFollowerController::class, 'destroy'])->name('users.followers.destroy');

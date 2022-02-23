@@ -64,14 +64,35 @@ class UserFollowerTest extends TestCase
     {
         $user = User::factory()->create();
         $authUser = User::factory()->create();
+        $user->followers()->attach([$authUser->id]);
         Sanctum::actingAs($authUser);
 
-        $response = $this->postJson(route('users.followers.store', [$user]));
+        $response = $this->deleteJson(route('users.followers.store', [$user]));
 
-        $response->assertCreated();
-        $this->assertDatabaseHas('user_followers', [
+        $response->assertOk();
+        $this->assertDatabaseMissing('user_followers', [
             'user_id' => $user->id,
             'follower_id' => $authUser->id,
         ]);
+    }
+
+    public function test_user_cannot_follow_himself()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson(route('users.followers.store', [$user]));
+
+        $response->assertForbidden();
+    }
+
+    public function test_user_cannot_unfollow_himself()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson(route('users.followers.destroy', [$user]));
+
+        $response->assertForbidden();
     }
 }
