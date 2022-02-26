@@ -27,15 +27,6 @@ class UserFollowerTest extends TestCase
             )->etc());
     }
 
-    public function test_guest_user_cannot_follow_another_user()
-    {
-        $user = User::factory()->create();
-
-        $response = $this->postJson(route('users.followers.store', [$user]));
-
-        $response->assertUnauthorized();
-    }
-
     public function test_auth_user_can_follow_another_user()
     {
         $user = User::factory()->create();
@@ -49,6 +40,25 @@ class UserFollowerTest extends TestCase
             'user_id' => $user->id,
             'follower_id' => $authUser->id,
         ]);
+    }
+
+    public function test_guest_user_cannot_follow_another_user()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->postJson(route('users.followers.store', [$user]));
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_user_cannot_follow_himself()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson(route('users.followers.store', [$user]));
+
+        $response->assertForbidden();
     }
 
     public function test_guest_user_cannot_unfollow_another_user()
@@ -74,16 +84,6 @@ class UserFollowerTest extends TestCase
             'user_id' => $user->id,
             'follower_id' => $authUser->id,
         ]);
-    }
-
-    public function test_user_cannot_follow_himself()
-    {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        $response = $this->postJson(route('users.followers.store', [$user]));
-
-        $response->assertForbidden();
     }
 
     public function test_user_cannot_unfollow_himself()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\User\UserPageResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,7 +39,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return new UserResource($user);
+        $user->loadCount(['followers', 'followings']);
+        return new UserPageResource($user);
     }
 
     /**
