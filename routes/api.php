@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedUser;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserFollowerController;
 use App\Http\Controllers\User\UserFollowingController;
@@ -22,3 +23,4 @@ Route::apiResource('users', UserController::class)->except(['store']);
 Route::apiResource('users.followers', UserFollowerController::class)->only(['index', 'store']);
 Route::apiResource('users.followings', UserFollowingController::class)->only(['index']);
 Route::delete('users/{user}/followers', [UserFollowerController::class, 'destroy'])->name('users.followers.destroy');
+Route::middleware('auth:sanctum')->get('/search', SearchController::class)->name('search');
