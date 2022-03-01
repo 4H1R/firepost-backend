@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         $users =  User::factory(20)->create();
 
         $users->each(function ($user) use ($users) {
-            $user->followers()->attach($this->pickUsers($users, 15, $user->id));
+            $user->followers()->attach($this->pickUsers($users, rand(0, 20), $user->id));
         });
     }
 }
