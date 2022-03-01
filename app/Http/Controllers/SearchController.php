@@ -10,7 +10,7 @@ class SearchController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $users = User::query()->cursorPaginate(20);
+        $users = User::query()->filterByNameOrUsername()->cursorPaginate(20);
         return UserPageResource::collection($users);
     }
 }

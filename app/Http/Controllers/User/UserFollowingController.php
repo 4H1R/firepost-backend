@@ -11,7 +11,7 @@ class UserFollowingController extends Controller
 {
     public function index(User $user)
     {
-        $followings = $user->followings()->cursorPaginate(20);
+        $followings = $user->followings()->filterByNameOrUsername()->cursorPaginate(20);
         return  UserResource::collection($followings);
     }
 }

@@ -49,6 +49,8 @@ class User extends Authenticatable
         return 'username';
     }
 
+    // ----- Getters -----
+
     public function getImageAttribute($image)
     {
         // we are using placeholder for image for fake users
@@ -56,5 +58,17 @@ class User extends Authenticatable
             $image = Storage::url($image);
         }
         return $image !== null ? $image : asset('assets/profile.svg');
+    }
+
+    // ----- Scopes -----
+
+    public function scopeFilterByNameOrUsername($query)
+    {
+        $searchValue = 'q';
+        if (!request()->filled($searchValue)) {
+            return $query;
+        }
+        $q = request()->get($searchValue);
+        return $query->where('name', 'like', "%$q%")->orWhere('username', 'like', "%$q%");
     }
 }
