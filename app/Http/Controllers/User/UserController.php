@@ -20,9 +20,12 @@ class UserController extends Controller
         //
     }
 
-    public function show(User $user)
+    public function show(Request $request, User $user)
     {
         $user->loadCount(['followers', 'followings']);
+        if ($request->user()) {
+            $user['is_followed'] = $user->followers()->where('follower_id', $request->user()->id)->exists();
+        }
         return new UserPageResource($user);
     }
 

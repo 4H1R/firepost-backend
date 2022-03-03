@@ -19,6 +19,7 @@ class UserPageResource extends UserResource
             'followings_count' => $this->followings_count ?? 0,
             'followers_count' => $this->followers_count ?? 0,
             'posts_count' => $this->posts_count ?? 0,
+            'is_followed' => $this->is_followed ?? false,
         ]);
     }
 }

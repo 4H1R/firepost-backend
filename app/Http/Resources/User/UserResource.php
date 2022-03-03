@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             'image' => $this->image,
             'bio' => $this->bio,
             'is_verified' => $this->is_verified,
+            'is_followed' => $this->when(isset($this->is_followed), $this->is_followed),
         ];
     }
 }

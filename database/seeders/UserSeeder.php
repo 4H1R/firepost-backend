@@ -20,10 +20,10 @@ class UserSeeder extends Seeder
 
     public function run()
     {
-        $users =  User::factory(20)->create();
+        $users =  User::factory(40)->create();
 
         $users->each(function ($user) use ($users) {
-            $user->followers()->attach($this->pickUsers($users, rand(0, 20), $user->id));
+            $user->followers()->attach($this->pickUsers($users, rand(0, 40), $user->id));
         });
     }
 }
