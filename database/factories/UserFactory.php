@@ -17,10 +17,11 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $username = $this->faker->unique()->userName();
         return [
             'name' => $this->faker->name() . ' ' . $this->faker->lastName(),
-            'username' => $this->faker->unique()->userName(),
-            'image' => $this->faker->boolean() ?  $this->faker->imageUrl(250, 250) : null,
+            'username' => $username,
+            'image' => $this->faker->boolean() ?  $this->faker->imageUrl(250, 250, null, true, $username) : null,
             'email' => $this->faker->unique()->safeEmail(),
             'bio' => $this->faker->boolean() ? $this->faker->text(130) : null,
             'email_verified_at' => now(),

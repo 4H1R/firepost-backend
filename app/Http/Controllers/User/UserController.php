@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserPageResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -22,7 +23,7 @@ class UserController extends Controller
 
     public function show(Request $request, User $user)
     {
-        $user->loadCount(['followers', 'followings']);
+        $user->loadCount(['followers', 'followings', 'posts']);
         if ($request->user()) {
             $user['is_followed'] = $user->followers()->where('follower_id', $request->user()->id)->exists();
         }
