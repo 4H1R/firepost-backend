@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedUser;
 use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Post\UserPostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserFollowerController;
@@ -23,8 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', AuthenticatedUser::class)->name('user');
     Route::get('/search', SearchController::class)->name('search');
 });
-Route::apiResource('posts', PostController::class)->except('index');
-Route::apiResource('users.posts', PostController::class)->only(['index']);
+Route::apiResource('posts', PostController::class);
+Route::apiResource('users.posts', UserPostController::class)->only(['index']);
 Route::apiResource('users', UserController::class)->except(['store']);
 Route::apiResource('users.followers', UserFollowerController::class)->only(['index', 'store']);
 Route::apiResource('users.followings', UserFollowingController::class)->only(['index']);

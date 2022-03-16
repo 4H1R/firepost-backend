@@ -10,9 +10,14 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index(User $user)
+    public function __construct()
     {
-        $posts = $user->posts()->cursorPaginate(30);
+        $this->middleware('auth:sanctum')->except('show');
+    }
+
+    public function index()
+    {
+        $posts = Post::query()->cursorPaginate(30);
         return PostResource::collection($posts);
     }
 
