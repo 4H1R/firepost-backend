@@ -17,7 +17,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::query()->cursorPaginate(30);
+        $posts = Post::query()->latest('id')->cursorPaginate(30);
         return PostResource::collection($posts);
     }
 

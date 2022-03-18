@@ -11,7 +11,7 @@ class UserPostController extends Controller
 {
     public function index(User $user)
     {
-        $posts = $user->posts()->cursorPaginate(30);
+        $posts = $user->posts()->latest('id')->cursorPaginate(30);
         return PostResource::collection($posts);
     }
 }
