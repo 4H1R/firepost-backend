@@ -22,11 +22,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', AuthenticatedUser::class)->name('user');
-    Route::get('/search', SearchController::class)->name('search');
+    Route::get('search', SearchController::class)->name('search');
 });
 Route::apiResource('posts', PostController::class);
 Route::apiResource('users.posts', UserPostController::class)->only(['index']);
-Route::apiResource('users', UserController::class)->except(['store']);
+// There is issue with uploaded image when using put/patch so we gotta use post
+Route::post('users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::apiResource('users', UserController::class)->except(['store', 'update']);
 Route::apiResource('users.followers', UserFollowerController::class)->only(['index', 'store']);
 Route::apiResource('users.followings', UserFollowingController::class)->only(['index']);
 Route::delete('users/{user}/followers', [UserFollowerController::class, 'destroy'])->name('users.followers.destroy');

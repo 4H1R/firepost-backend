@@ -5,20 +5,14 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\AuthUserResource;
 use App\Http\Resources\User\UserPageResource;
-use App\Http\Resources\User\UserResource;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     public function index()
-    {
-        //
-    }
-
-    public function store(Request $request)
     {
         //
     }
@@ -41,6 +35,13 @@ class UserController extends Controller
             'bio' => ['nullable', 'string', 'max:120'],
             'image' => ['nullable', 'image', 'max:512'],
         ]);
+
+        if ($request->hasFile('image')) {
+            if ($user->image) {
+                Storage::delete($user->getRawOriginal('image'));
+            }
+            $validated['image'] = Storage::put("$user->id", $request->image);
+        }
 
         $user->update($validated);
         return new AuthUserResource($user);
