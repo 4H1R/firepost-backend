@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthenticatedUser;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Post\UserPostController;
@@ -20,7 +21,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('search', SearchController::class)->middleware('auth:sanctum')->name('search');
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthenticatedSessionController::class, 'index'])->name('user');
+    Route::get('search', SearchController::class)->name('search');
+});
 Route::apiResource('posts', PostController::class);
 Route::apiResource('users.posts', UserPostController::class)->only(['index']);
 // There is issue with uploaded image when using put/patch so we gotta use post
