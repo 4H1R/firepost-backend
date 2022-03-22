@@ -32,7 +32,8 @@ class UserTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->create());
         $user =  User::factory()->create();
-        $response = $this->putJson(route('users.update', [$user]), [
+
+        $response = $this->postJson(route('users.update', [$user]), [
             'name' => 'new name',
             'username' => 'newusername',
             'bio' => 'new bio',
@@ -50,7 +51,8 @@ class UserTest extends TestCase
             'username' => 'newusername',
             'bio' => 'new bio',
         ];
-        $response = $this->putJson(route('users.update', [$user]), $data);
+
+        $response = $this->postJson(route('users.update', [$user]), $data);
 
         $response->assertOk();
         $this->assertDatabaseHas('users', $data);

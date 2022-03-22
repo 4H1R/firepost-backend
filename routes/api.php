@@ -20,10 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('user', AuthenticatedUser::class)->name('user');
-    Route::get('search', SearchController::class)->name('search');
-});
+Route::get('search', SearchController::class)->middleware('auth:sanctum')->name('search');
 Route::apiResource('posts', PostController::class);
 Route::apiResource('users.posts', UserPostController::class)->only(['index']);
 // There is issue with uploaded image when using put/patch so we gotta use post

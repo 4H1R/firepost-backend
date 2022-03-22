@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
+    public function index(Request $request)
+    {
+        return new AuthUserResource($request->user());
+    }
+
     /**
      * Handle an incoming authentication request.
      *

@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
@@ -33,5 +34,23 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertGuest();
+    }
+
+    public function test_guest_user_cannot_get_his_data()
+    {
+        $response = $this->getJson(route('user'));
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_auth_user_can_get_his_data()
+    {
+        $user =  User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->getJson(route('user'));
+
+        $response->assertOk()
+            ->assertJsonPath('data.id', $user->id);
     }
 }
